@@ -1,0 +1,14 @@
+<!-- ABOUTME: Single membership request card with approve/reject buttons -->
+<!-- ABOUTME: Wrapped in Turbo Frame for dynamic updates -->
+<li class="px-4 py-4">
+  <div class="flex items-center justify-between">
+    <div class="flex-1">
+      <p class="text-sm font-medium text-gray-900"><%= membership.user.name %></p>
+      <p class="text-xs text-gray-500">Requested <%= time_ago_in_words(membership.requested_at) %> ago</p>
+    </div>
+    <div class="flex gap-2">
+      <%= button_to "Approve", approve_study_group_membership_path(membership), method: :patch, class: "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded text-sm" %>
+      <%= button_to "Reject", reject_study_group_membership_path(membership), method: :patch, class: "bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded text-sm" %>
+    </div>
+  </div>
+</li>

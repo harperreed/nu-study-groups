@@ -2,7 +2,7 @@
 # ABOUTME: Handles CRUD operations with Pundit authorization for study groups
 class StudyGroupsController < ApplicationController
   before_action :authenticate_user!
-  before_action :set_study_group, only: [:show, :edit, :update, :destroy]
+  before_action :set_study_group, only: [:show, :edit, :update, :destroy, :join]
 
   def index
     @study_groups = StudyGroup.active.includes(:course, :creator)
@@ -48,6 +48,31 @@ class StudyGroupsController < ApplicationController
     authorize @study_group
     @study_group.destroy
     redirect_to study_groups_path, notice: 'Study group was successfully deleted.'
+  end
+
+  def join
+    authorize @study_group, :show?
+
+    # Only check for pending and approved memberships, allow rejoin after rejection
+    existing_membership = @study_group.study_group_memberships
+                                      .where(user: current_user)
+                                      .where.not(status: :rejected)
+                                      .first
+
+    if existing_membership&.pending?
+      redirect_to @study_group, alert: 'You already have a pending join request for this group.'
+      return
+    elsif existing_membership&.approved?
+      redirect_to @study_group, alert: 'You are already a member of this group.'
+      return
+    end
+
+    @study_group.study_group_memberships.create!(
+      user: current_user,
+      status: :pending,
+      requested_at: Time.current
+    )
+    redirect_to @study_group, notice: 'Your join request has been submitted and is pending approval.'
   end
 
   private

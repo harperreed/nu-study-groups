@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_18_170003) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_18_181635) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -129,7 +129,7 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_18_170003) do
     t.index ["approved_by_id"], name: "index_study_group_memberships_on_approved_by_id"
     t.index ["status"], name: "index_study_group_memberships_on_status"
     t.index ["study_group_id"], name: "index_study_group_memberships_on_study_group_id"
-    t.index ["user_id", "study_group_id"], name: "index_study_group_memberships_on_user_id_and_study_group_id", unique: true
+    t.index ["user_id", "study_group_id"], name: "index_memberships_on_user_and_group_excluding_rejected", unique: true, where: "status != 2"
     t.index ["user_id"], name: "index_study_group_memberships_on_user_id"
   end
 

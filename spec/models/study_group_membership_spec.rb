@@ -6,7 +6,7 @@ RSpec.describe StudyGroupMembership, type: :model do
   describe 'validations' do
     subject { build(:study_group_membership) }
 
-    it { should validate_uniqueness_of(:user_id).scoped_to(:study_group_id) }
+    it { should validate_uniqueness_of(:user_id).scoped_to(:study_group_id).with_message('already has an active membership request') }
   end
 
   describe 'associations' do

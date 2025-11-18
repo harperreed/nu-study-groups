@@ -7,7 +7,11 @@ class StudyGroupMembership < ApplicationRecord
 
   enum status: { pending: 0, approved: 1, rejected: 2 }
 
-  validates :user_id, uniqueness: { scope: :study_group_id }
+  validates :user_id, uniqueness: {
+    scope: :study_group_id,
+    conditions: -> { where.not(status: :rejected) },
+    message: "already has an active membership request"
+  }
 
   def approve!(approver)
     update!(

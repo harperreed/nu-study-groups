@@ -1,0 +1,21 @@
+<!-- ABOUTME: List of pending membership requests for group creator/admin to review -->
+<!-- ABOUTME: Shows approve/reject buttons for each pending request -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-2xl font-bold text-gray-900 mb-6">Pending Join Requests for <%= @study_group.name %></h1>
+
+  <% if @pending_memberships.any? %>
+    <div class="bg-white shadow sm:rounded-lg">
+      <ul class="divide-y divide-gray-200">
+        <% @pending_memberships.each do |membership| %>
+          <%= turbo_frame_tag dom_id(membership) do %>
+            <%= render 'membership_request', membership: membership %>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <p class="text-sm text-gray-500">No pending requests at this time.</p>
+  <% end %>
+
+  <%= link_to "Back to Study Group", study_group_path(@study_group), class: "mt-4 inline-block text-blue-600 hover:text-blue-800" %>
+</div>

@@ -11,6 +11,12 @@
         </span>
       </div>
       <div class="flex gap-2">
+        <% user_membership = @study_group.study_group_memberships.find_by(user: current_user) %>
+        <% if user_membership&.pending? %>
+          <span class="bg-yellow-100 text-yellow-800 font-semibold py-2 px-4 rounded">Pending Approval</span>
+        <% elsif !user_membership && current_user != @study_group.creator %>
+          <%= button_to "Join Group", join_study_group_path(@study_group), method: :post, class: "bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded" %>
+        <% end %>
         <% if policy(@study_group).update? %>
           <%= link_to "Edit", edit_study_group_path(@study_group), class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
         <% end %>
@@ -40,6 +46,33 @@
         </div>
       </dl>
     </div>
+
+    <% if policy(@study_group).update? %>
+      <% pending_requests = @study_group.study_group_memberships.where(status: :pending).includes(:user) %>
+      <% if pending_requests.any? %>
+        <div class="border-t border-gray-200 px-4 py-5 sm:px-6 bg-yellow-50">
+          <h3 class="text-lg font-medium text-gray-900 mb-4">Pending Join Requests (<%= pending_requests.count %>)</h3>
+          <ul class="divide-y divide-gray-200">
+            <% pending_requests.each do |membership| %>
+              <%= turbo_frame_tag dom_id(membership) do %>
+                <li class="py-3">
+                  <div class="flex items-center justify-between">
+                    <div class="flex-1">
+                      <p class="text-sm font-medium text-gray-900"><%= membership.user.name %></p>
+                      <p class="text-xs text-gray-500">Requested <%= time_ago_in_words(membership.requested_at) %> ago</p>
+                    </div>
+                    <div class="flex gap-2">
+                      <%= button_to "Approve", approve_study_group_membership_path(membership), method: :patch, class: "bg-green-600 hover:bg-green-700 text-white font-semibold py-1 px-3 rounded text-sm" %>
+                      <%= button_to "Reject", reject_study_group_membership_path(membership), method: :patch, class: "bg-red-600 hover:bg-red-700 text-white font-semibold py-1 px-3 rounded text-sm" %>
+                    </div>
+                  </div>
+                </li>
+              <% end %>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    <% end %>
 
     <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
       <h3 class="text-lg font-medium text-gray-900 mb-4">Members (<%= @study_group.members.count %>)</h3>
