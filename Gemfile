@@ -47,7 +47,12 @@ gem "bootsnap", require: false
 # Use Active Storage variants [https://guides.rubyonrails.org/active_storage_overview.html#transforming-images]
 # gem "image_processing", "~> 1.2"
 
+# OmniAuth for OAuth authentication
+gem 'omniauth-google-oauth2', '~> 1.1.0'
+gem 'omniauth-rails_csrf_protection', '~> 1.0.0'
+
 group :development, :test do
+  gem 'dotenv-rails', '~> 2.8.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
   gem "debug", platforms: %i[ mri windows ]
   gem 'rspec-rails', '~> 6.1.0'
