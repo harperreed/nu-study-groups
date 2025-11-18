@@ -10,12 +10,48 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_18_165425) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_18_170003) do
+  create_table "active_storage_attachments", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
   create_table "attendance_records", force: :cascade do |t|
+    t.integer "user_id", null: false
     t.integer "session_id", null: false
+    t.boolean "attended", default: false, null: false
+    t.text "notes"
+    t.integer "recorded_by_id", null: false
+    t.datetime "recorded_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["recorded_by_id"], name: "index_attendance_records_on_recorded_by_id"
     t.index ["session_id"], name: "index_attendance_records_on_session_id"
+    t.index ["user_id", "session_id"], name: "index_attendance_records_on_user_id_and_session_id", unique: true
+    t.index ["user_id"], name: "index_attendance_records_on_user_id"
   end
 
   create_table "course_teachers", force: :cascade do |t|
@@ -40,10 +76,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_18_165425) do
   end
 
   create_table "session_resources", force: :cascade do |t|
+    t.string "title", null: false
+    t.integer "resource_type", default: 0, null: false
     t.integer "session_id", null: false
+    t.integer "uploaded_by_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["resource_type"], name: "index_session_resources_on_resource_type"
     t.index ["session_id"], name: "index_session_resources_on_session_id"
+    t.index ["uploaded_by_id"], name: "index_session_resources_on_uploaded_by_id"
   end
 
   create_table "session_rsvps", force: :cascade do |t|
@@ -119,10 +160,15 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_18_165425) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "attendance_records", "sessions"
+  add_foreign_key "attendance_records", "users"
+  add_foreign_key "attendance_records", "users", column: "recorded_by_id"
   add_foreign_key "course_teachers", "courses"
   add_foreign_key "course_teachers", "users"
   add_foreign_key "session_resources", "sessions"
+  add_foreign_key "session_resources", "users", column: "uploaded_by_id"
   add_foreign_key "session_rsvps", "sessions"
   add_foreign_key "session_rsvps", "users"
   add_foreign_key "sessions", "study_groups"
