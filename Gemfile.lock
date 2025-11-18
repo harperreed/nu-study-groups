@@ -226,6 +226,8 @@ GEM
       actionpack (>= 4.2)
       omniauth (~> 2.0)
     ostruct (0.6.3)
+    pg (1.6.2-aarch64-linux)
+    pg (1.6.2-arm64-darwin)
     pp (0.6.3)
       prettyprint
     prettyprint (0.2.0)
@@ -398,6 +400,7 @@ DEPENDENCIES
   letter_opener (~> 1.8)
   omniauth-google-oauth2 (~> 1.1.0)
   omniauth-rails_csrf_protection (~> 1.0.0)
+  pg (~> 1.5)
   puma (>= 5.0)
   pundit (~> 2.3.0)
   pundit-matchers (~> 3.1.0)

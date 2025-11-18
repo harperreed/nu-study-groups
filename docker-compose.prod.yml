@@ -1,0 +1,88 @@
+# ABOUTME: Production Docker Compose configuration with PostgreSQL
+# ABOUTME: Runs web service, Solid Queue worker, and PostgreSQL database
+version: '3.8'
+
+services:
+  db:
+    image: postgres:16-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nu}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${POSTGRES_DB:-nu_production}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nu}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  queue_db:
+    image: postgres:16-alpine
+    volumes:
+      - queue_postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nu}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-changeme}
+      POSTGRES_DB: ${QUEUE_POSTGRES_DB:-nu_queue_production}
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nu}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: unless-stopped
+
+  web:
+    build:
+      context: .
+      target: production
+    command: bash -c "rm -f tmp/pids/server.pid && bundle exec rails db:prepare && bundle exec rails server -b 0.0.0.0"
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nu}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-nu_production}
+      - QUEUE_DATABASE_URL=postgresql://${POSTGRES_USER:-nu}:${POSTGRES_PASSWORD:-changeme}@queue_db:5432/${QUEUE_POSTGRES_DB:-nu_queue_production}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - RAILS_SERVE_STATIC_FILES=true
+      - RAILS_LOG_TO_STDOUT=true
+    depends_on:
+      db:
+        condition: service_healthy
+      queue_db:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+
+  worker:
+    build:
+      context: .
+      target: production
+    command: bundle exec solid_queue start
+    environment:
+      - RAILS_ENV=production
+      - DATABASE_URL=postgresql://${POSTGRES_USER:-nu}:${POSTGRES_PASSWORD:-changeme}@db:5432/${POSTGRES_DB:-nu_production}
+      - QUEUE_DATABASE_URL=postgresql://${POSTGRES_USER:-nu}:${POSTGRES_PASSWORD:-changeme}@queue_db:5432/${QUEUE_POSTGRES_DB:-nu_queue_production}
+      - SECRET_KEY_BASE=${SECRET_KEY_BASE}
+      - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
+      - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+      queue_db:
+        condition: service_healthy
+      web:
+        condition: service_healthy
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  queue_postgres_data:
