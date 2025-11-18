@@ -1,6 +1,9 @@
 # ABOUTME: User model for authentication via OAuth (Google/GitHub)
 # ABOUTME: Supports three roles: student, teacher, admin with enum
 class User < ApplicationRecord
+  has_many :course_teachers, dependent: :destroy
+  has_many :teaching_courses, through: :course_teachers, source: :course
+
   enum role: { student: 0, teacher: 1, admin: 2 }
 
   validates :email, presence: true, uniqueness: true
