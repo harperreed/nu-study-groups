@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   # Courses (admin only)
   resources :courses
 
+  # Study Groups (students/teachers/admins can create, creator/admin can manage)
+  resources :study_groups
+
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check
 

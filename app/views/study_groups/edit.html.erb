@@ -1,0 +1,16 @@
+<!-- ABOUTME: Edit study group form page -->
+<!-- ABOUTME: Uses shared form partial for study group editing -->
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h1 class="text-2xl font-bold text-gray-900">Edit Study Group</h1>
+      <p class="mt-1 text-sm text-gray-500">Update your study group details</p>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <%= render 'form', study_group: @study_group %>
+    </div>
+  </div>
+
+  <%= link_to "Back to Study Group", study_group_path(@study_group), class: "mt-4 inline-block text-blue-600 hover:text-blue-800" %>
+</div>

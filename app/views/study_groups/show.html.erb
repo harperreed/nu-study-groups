@@ -1,0 +1,73 @@
+<!-- ABOUTME: Study group detail page showing group info, members, and sessions -->
+<!-- ABOUTME: Creator and admins see edit/delete buttons -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900"><%= @study_group.name %></h1>
+        <p class="text-sm text-gray-500"><%= @study_group.course.name %></p>
+        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= @study_group.official? ? 'bg-purple-100 text-purple-800' : 'bg-green-100 text-green-800' %> mt-2">
+          <%= @study_group.group_type.titleize %>
+        </span>
+      </div>
+      <div class="flex gap-2">
+        <% if policy(@study_group).update? %>
+          <%= link_to "Edit", edit_study_group_path(@study_group), class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
+        <% end %>
+        <% if policy(@study_group).destroy? %>
+          <%= button_to "Delete", study_group_path(@study_group), method: :delete, data: { confirm: "Are you sure?" }, class: "bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-4 rounded" %>
+        <% end %>
+      </div>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <dl class="grid grid-cols-1 gap-x-4 gap-y-8 sm:grid-cols-2">
+        <div class="sm:col-span-2">
+          <dt class="text-sm font-medium text-gray-500">Description</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @study_group.description || 'No description provided' %></dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Course</dt>
+          <dd class="mt-1 text-sm text-gray-900">
+            <%= link_to @study_group.course.name, course_path(@study_group.course), class: "text-blue-600 hover:text-blue-800" %>
+          </dd>
+        </div>
+
+        <div>
+          <dt class="text-sm font-medium text-gray-500">Created By</dt>
+          <dd class="mt-1 text-sm text-gray-900"><%= @study_group.creator.name %></dd>
+        </div>
+      </dl>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Members (<%= @study_group.members.count %>)</h3>
+      <% if @study_group.members.any? %>
+        <ul class="divide-y divide-gray-200">
+          <% @study_group.members.each do |member| %>
+            <li class="py-3">
+              <div class="flex items-center justify-between">
+                <p class="text-sm text-gray-900"><%= member.name %></p>
+                <span class="text-xs text-gray-500"><%= member.role.titleize %></span>
+              </div>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-gray-500">No members yet</p>
+      <% end %>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <h3 class="text-lg font-medium text-gray-900 mb-4">Upcoming Sessions</h3>
+      <% if @study_group.sessions.any? %>
+        <p class="text-sm text-gray-500">Sessions feature coming soon</p>
+      <% else %>
+        <p class="text-sm text-gray-500">No sessions scheduled yet</p>
+      <% end %>
+    </div>
+  </div>
+
+  <%= link_to "Back to Study Groups", study_groups_path, class: "mt-4 inline-block text-blue-600 hover:text-blue-800" %>
+</div>
