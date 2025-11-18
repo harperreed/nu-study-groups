@@ -1,0 +1,177 @@
+<div class="min-h-screen bg-gray-50 py-8">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Admin Dashboard</h1>
+      <p class="mt-2 text-sm text-gray-600">Overview of platform statistics and recent activity</p>
+    </div>
+
+    <!-- Statistics Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- User Statistics -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-sm font-medium text-gray-500 uppercase">Students</h3>
+        <p class="mt-2 text-3xl font-bold text-gray-900"><%= @students_count %></p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-sm font-medium text-gray-500 uppercase">Teachers</h3>
+        <p class="mt-2 text-3xl font-bold text-gray-900"><%= @teachers_count %></p>
+      </div>
+
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-sm font-medium text-gray-500 uppercase">Admins</h3>
+        <p class="mt-2 text-3xl font-bold text-gray-900"><%= @admins_count %></p>
+      </div>
+
+      <!-- Course Statistics -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-sm font-medium text-gray-500 uppercase">Courses</h3>
+        <p class="mt-2 text-3xl font-bold text-gray-900"><%= @courses_count %></p>
+      </div>
+    </div>
+
+    <!-- Study Groups & Sessions Row -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+      <!-- Study Group Statistics -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Study Groups</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Total Groups</span>
+            <span class="text-xl font-bold text-gray-900"><%= @total_groups_count %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Active Groups</span>
+            <span class="text-xl font-bold text-green-600"><%= @active_groups_count %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Archived Groups</span>
+            <span class="text-xl font-bold text-gray-500"><%= @archived_groups_count %></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Session Statistics -->
+      <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Sessions</h3>
+        <div class="space-y-3">
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Total Sessions</span>
+            <span class="text-xl font-bold text-gray-900"><%= @total_sessions_count %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Upcoming Sessions</span>
+            <span class="text-xl font-bold text-blue-600"><%= @upcoming_sessions_count %></span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">Past Sessions</span>
+            <span class="text-xl font-bold text-gray-500"><%= @past_sessions_count %></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pending Approvals -->
+    <div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 mb-8 rounded-lg shadow">
+      <div class="flex items-center">
+        <div class="flex-shrink-0">
+          <svg class="h-6 w-6 text-yellow-600" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M8.257 3.099c.765-1.36 2.722-1.36 3.486 0l5.58 9.92c.75 1.334-.213 2.98-1.742 2.98H4.42c-1.53 0-2.493-1.646-1.743-2.98l5.58-9.92zM11 13a1 1 0 11-2 0 1 1 0 012 0zm-1-8a1 1 0 00-1 1v3a1 1 0 002 0V6a1 1 0 00-1-1z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-yellow-700">
+            <span class="font-bold"><%= @pending_requests_count %></span> pending join requests awaiting approval
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Recent Activity -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Recent Memberships -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Memberships</h3>
+        </div>
+        <div class="divide-y divide-gray-200">
+          <% @recent_memberships.each do |membership| %>
+            <div class="px-6 py-3">
+              <p class="text-sm font-medium text-gray-900"><%= membership.user.name %></p>
+              <p class="text-xs text-gray-600"><%= membership.study_group.name %></p>
+              <p class="text-xs text-gray-500">
+                <span class="<%= membership.pending? ? 'text-yellow-600' : membership.approved? ? 'text-green-600' : 'text-red-600' %>">
+                  <%= membership.status %>
+                </span>
+              </p>
+            </div>
+          <% end %>
+          <% if @recent_memberships.empty? %>
+            <div class="px-6 py-4 text-sm text-gray-500">No recent memberships</div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Recent Sessions -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Recent Sessions</h3>
+        </div>
+        <div class="divide-y divide-gray-200">
+          <% @recent_sessions.each do |session| %>
+            <div class="px-6 py-3">
+              <p class="text-sm font-medium text-gray-900"><%= session.title %></p>
+              <p class="text-xs text-gray-600"><%= session.study_group.name %></p>
+              <p class="text-xs text-gray-500"><%= session.date.strftime('%b %d, %Y') %></p>
+            </div>
+          <% end %>
+          <% if @recent_sessions.empty? %>
+            <div class="px-6 py-4 text-sm text-gray-500">No recent sessions</div>
+          <% end %>
+        </div>
+      </div>
+
+      <!-- Recent RSVPs -->
+      <div class="bg-white rounded-lg shadow">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h3 class="text-lg font-semibold text-gray-900">Recent RSVPs</h3>
+        </div>
+        <div class="divide-y divide-gray-200">
+          <% @recent_rsvps.each do |rsvp| %>
+            <div class="px-6 py-3">
+              <p class="text-sm font-medium text-gray-900"><%= rsvp.user.name %></p>
+              <p class="text-xs text-gray-600"><%= rsvp.session.title %></p>
+              <p class="text-xs text-gray-500">
+                <span class="<%= rsvp.going? ? 'text-green-600' : rsvp.maybe? ? 'text-yellow-600' : 'text-gray-600' %>">
+                  <%= rsvp.status %>
+                </span>
+              </p>
+            </div>
+          <% end %>
+          <% if @recent_rsvps.empty? %>
+            <div class="px-6 py-4 text-sm text-gray-500">No recent RSVPs</div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Links -->
+    <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+      <a href="<%= courses_path %>" class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg shadow p-6 text-center transition">
+        <h3 class="text-lg font-semibold">Manage Courses</h3>
+        <p class="text-sm mt-2 opacity-90">View and edit course catalog</p>
+      </a>
+
+      <a href="<%= study_groups_path %>" class="bg-green-600 hover:bg-green-700 text-white rounded-lg shadow p-6 text-center transition">
+        <h3 class="text-lg font-semibold">Manage Groups</h3>
+        <p class="text-sm mt-2 opacity-90">Oversee all study groups</p>
+      </a>
+
+      <a href="<%= study_group_memberships_path %>" class="bg-yellow-600 hover:bg-yellow-700 text-white rounded-lg shadow p-6 text-center transition">
+        <h3 class="text-lg font-semibold">Pending Approvals</h3>
+        <p class="text-sm mt-2 opacity-90">Review membership requests</p>
+      </a>
+    </div>
+  </div>
+</div>

@@ -3,6 +3,11 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'sessions#create'
   delete '/logout', to: 'sessions#destroy'
 
+  # Admin Dashboard
+  namespace :admin do
+    get 'dashboard', to: 'admin#dashboard'
+  end
+
   # Courses (admin only)
   resources :courses
 
