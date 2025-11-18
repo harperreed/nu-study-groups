@@ -1,0 +1,20 @@
+Hi <%= @student.name %>,
+
+Great news! You've been approved to join "<%= @group.name %>" for <%= @course.code %> - <%= @course.name %>.
+
+<% if @upcoming_sessions.any? %>
+Upcoming Sessions:
+<% @upcoming_sessions.each do |session| %>
+- <%= session.title %> on <%= session.date.strftime('%B %d, %Y') %> at <%= session.start_time.strftime('%I:%M %p') %>
+<% end %>
+<% else %>
+No upcoming sessions scheduled yet. Check back soon!
+<% end %>
+
+You can now view sessions, RSVP, and access study materials.
+
+View Group: <%= study_group_url(@group) %>
+
+Welcome to the group!
+
+The Study Group Team

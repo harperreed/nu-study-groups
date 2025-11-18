@@ -1,0 +1,35 @@
+Hi <%= @user.name %>,
+
+You've successfully RSVP'd for the following session:
+
+<%= @session.title %>
+<%= @session.date.strftime('%A, %B %d, %Y') %>
+<%= @session.start_time.strftime('%I:%M %p') %> - <%= @session.end_time.strftime('%I:%M %p') %>
+
+Study Group: <%= @group.name %>
+Course: <%= @course.code %> - <%= @course.name %>
+
+<% if @session.location.present? %>
+Location: <%= @session.location %>
+<% end %>
+<% if @session.meeting_link.present? %>
+Meeting Link: <%= @session.meeting_link %>
+<% end %>
+
+<% if @session.description.present? %>
+Description:
+<%= @session.description %>
+<% end %>
+
+<% if @session.prep_materials.present? %>
+Prep Materials:
+<%= @session.prep_materials %>
+<% end %>
+
+A calendar invitation (.ics file) is attached to this email. You can add it to your preferred calendar app.
+
+View Session Details: <%= study_group_study_session_url(@group, @session) %>
+
+See you there!
+
+The Study Group Team

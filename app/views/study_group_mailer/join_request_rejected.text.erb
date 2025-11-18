@@ -1,0 +1,15 @@
+Hi <%= @student.name %>,
+
+Thank you for your interest in "<%= @group.name %>" for <%= @course.code %> - <%= @course.name %>.
+
+Unfortunately, your request to join this study group was not approved at this time. This could be due to capacity limits, group dynamics, or other factors.
+
+We encourage you to:
+- Browse other study groups for <%= @course.name %>
+- Create your own peer-led study group
+- Reach out to the course instructor for alternative study resources
+
+Browse Study Groups: <%= study_groups_url %>
+
+Thanks for your understanding,
+The Study Group Team

@@ -29,12 +29,20 @@ class StudyGroupMembershipsController < ApplicationController
   def approve
     authorize @membership
     @membership.approve!(current_user)
+
+    # Send approval email to student
+    StudyGroupMailer.join_request_approved(@membership).deliver_now
+
     redirect_to study_group_path(@membership.study_group), notice: "#{@membership.user.name} has been approved to join the group."
   end
 
   def reject
     authorize @membership
     @membership.reject!(current_user)
+
+    # Send rejection email to student
+    StudyGroupMailer.join_request_rejected(@membership).deliver_now
+
     redirect_to study_group_path(@membership.study_group), notice: "#{@membership.user.name}'s request has been rejected."
   end
 

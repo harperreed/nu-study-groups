@@ -1,0 +1,29 @@
+Hi <%= @user.name %>,
+
+This is a friendly reminder that you have a study session coming up tomorrow:
+
+<%= @session.title %>
+<%= @session.date.strftime('%A, %B %d, %Y') %>
+<%= @session.start_time.strftime('%I:%M %p') %> - <%= @session.end_time.strftime('%I:%M %p') %>
+
+Study Group: <%= @group.name %>
+
+<% if @session.location.present? %>
+Location: <%= @session.location %>
+<% end %>
+<% if @session.meeting_link.present? %>
+Meeting Link: <%= @session.meeting_link %>
+<% end %>
+
+<% if @session.prep_materials.present? %>
+Prep Materials:
+<%= @session.prep_materials %>
+<% end %>
+
+A calendar invitation is attached in case you need to re-add it to your calendar.
+
+View Session Details: <%= study_group_study_session_url(@group, @session) %>
+
+Looking forward to seeing you!
+
+The Study Group Team

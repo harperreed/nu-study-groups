@@ -1,0 +1,14 @@
+Hi <%= @creator.name %>,
+
+<%= @student.name %> has requested to join your study group "<%= @group.name %>" for <%= @course.code %> - <%= @course.name %>.
+
+Student Information:
+- Name: <%= @student.name %>
+- Email: <%= @student.email %>
+
+You can review and approve or reject this request by visiting your study group page.
+
+View Group: <%= study_group_url(@group) %>
+
+Thanks,
+The Study Group Team

@@ -67,11 +67,15 @@ class StudyGroupsController < ApplicationController
       return
     end
 
-    @study_group.study_group_memberships.create!(
+    membership = @study_group.study_group_memberships.create!(
       user: current_user,
       status: :pending,
       requested_at: Time.current
     )
+
+    # Send email notification to group creator
+    StudyGroupMailer.join_request_submitted(membership).deliver_now
+
     redirect_to @study_group, notice: 'Your join request has been submitted and is pending approval.'
   end
 
