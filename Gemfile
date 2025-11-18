@@ -51,6 +51,9 @@ gem "bootsnap", require: false
 gem 'omniauth-google-oauth2', '~> 1.1.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0.0'
 
+# Pundit for authorization
+gem 'pundit', '~> 2.3.0'
+
 group :development, :test do
   gem 'dotenv-rails', '~> 2.8.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -77,4 +80,5 @@ group :test do
   gem "selenium-webdriver"
   gem 'shoulda-matchers', '~> 6.0.0'
   gem 'simplecov', require: false
+  gem 'pundit-matchers', '~> 3.1.0'
 end
