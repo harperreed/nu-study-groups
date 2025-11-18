@@ -1,0 +1,9 @@
+<!-- ABOUTME: Edit course form for admins -->
+<!-- ABOUTME: Uses shared form partial -->
+<div class="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <h1 class="text-3xl font-bold text-gray-900 mb-6">Edit Course</h1>
+
+  <%= render 'form', course: @course %>
+
+  <%= link_to "Cancel", course_path(@course), class: "mt-4 inline-block text-gray-600 hover:text-gray-800" %>
+</div>

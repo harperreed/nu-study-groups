@@ -1,0 +1,45 @@
+<!-- ABOUTME: Shared form partial for creating and editing courses -->
+<!-- ABOUTME: Displays validation errors and uses Tailwind styling -->
+<%= form_with(model: course, class: "space-y-6") do |form| %>
+  <% if course.errors.any? %>
+    <div class="bg-red-50 border border-red-200 text-red-800 rounded-md p-4">
+      <h2 class="text-lg font-medium mb-2"><%= pluralize(course.errors.count, "error") %> prohibited this course from being saved:</h2>
+      <ul class="list-disc list-inside">
+        <% course.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div>
+    <%= form.label :code, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.text_field :code, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div>
+    <%= form.label :name, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.text_field :name, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div>
+    <%= form.label :description, class: "block text-sm font-medium text-gray-700" %>
+    <%= form.text_area :description, rows: 4, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <%= form.label :semester, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.select :semester, ['Fall', 'Spring', 'Summer'], {}, class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+
+    <div>
+      <%= form.label :year, class: "block text-sm font-medium text-gray-700" %>
+      <%= form.number_field :year, value: (course.year || Time.current.year), class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500" %>
+    </div>
+  </div>
+
+  <div>
+    <%= form.submit class: "w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded cursor-pointer" %>
+  </div>
+<% end %>

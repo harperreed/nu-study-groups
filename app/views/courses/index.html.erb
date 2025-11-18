@@ -1,0 +1,32 @@
+<!-- ABOUTME: Courses listing page showing all available courses -->
+<!-- ABOUTME: Admins see create/edit/delete buttons, others see read-only list -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-900">Courses</h1>
+    <% if policy(Course).create? %>
+      <%= link_to "New Course", new_course_path, class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
+    <% end %>
+  </div>
+
+  <div class="bg-white shadow overflow-hidden sm:rounded-md">
+    <ul role="list" class="divide-y divide-gray-200">
+      <% @courses.each do |course| %>
+        <li>
+          <%= link_to course_path(course), class: "block hover:bg-gray-50" do %>
+            <div class="px-4 py-4 sm:px-6">
+              <div class="flex items-center justify-between">
+                <div>
+                  <p class="text-lg font-semibold text-blue-600"><%= course.code %></p>
+                  <p class="text-sm text-gray-900"><%= course.name %></p>
+                </div>
+                <div class="text-sm text-gray-500">
+                  <%= course.semester %> <%= course.year %>
+                </div>
+              </div>
+            </div>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
