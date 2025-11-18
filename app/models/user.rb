@@ -4,6 +4,10 @@ class User < ApplicationRecord
   has_many :course_teachers, dependent: :destroy
   has_many :teaching_courses, through: :course_teachers, source: :course
 
+  has_many :created_study_groups, class_name: 'StudyGroup', foreign_key: 'creator_id', dependent: :destroy
+  has_many :study_group_memberships, dependent: :destroy
+  has_many :study_groups, through: :study_group_memberships
+
   enum role: { student: 0, teacher: 1, admin: 2 }
 
   validates :email, presence: true, uniqueness: true
