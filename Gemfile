@@ -54,6 +54,9 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0.0'
 # Pundit for authorization
 gem 'pundit', '~> 2.3.0'
 
+# Icalendar for generating .ics calendar files
+gem 'icalendar', '~> 2.10'
+
 group :development, :test do
   gem 'dotenv-rails', '~> 2.8.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
@@ -66,6 +69,9 @@ end
 group :development do
   # Use console on exceptions pages [https://github.com/rails/web-console]
   gem "web-console"
+
+  # Letter opener for previewing emails in development
+  gem 'letter_opener', '~> 1.8'
 
   # Add speed badges [https://github.com/MiniProfiler/rack-mini-profiler]
   # gem "rack-mini-profiler"
