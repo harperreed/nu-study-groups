@@ -1,5 +1,5 @@
 # ABOUTME: Docker Compose configuration for development environment
-# ABOUTME: Runs Rails app with SQLite, exposes port 3000
+# ABOUTME: Runs Rails web app and Solid Queue worker with SQLite databases
 version: '3.8'
 
 services:
@@ -19,6 +19,21 @@ services:
       - RAILS_ENV=development
     stdin_open: true
     tty: true
+
+  worker:
+    build:
+      context: .
+      target: development
+    command: bundle exec solid_queue start
+    volumes:
+      - .:/app
+      - bundle:/usr/local/bundle
+    env_file:
+      - .env
+    environment:
+      - RAILS_ENV=development
+    depends_on:
+      - web
 
 volumes:
   bundle:

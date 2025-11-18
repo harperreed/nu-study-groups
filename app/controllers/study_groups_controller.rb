@@ -74,7 +74,7 @@ class StudyGroupsController < ApplicationController
     )
 
     # Send email notification to group creator
-    StudyGroupMailer.join_request_submitted(membership).deliver_now
+    StudyGroupMailer.join_request_submitted(membership).deliver_later
 
     redirect_to @study_group, notice: 'Your join request has been submitted and is pending approval.'
   end

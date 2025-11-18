@@ -57,6 +57,9 @@ gem 'pundit', '~> 2.3.0'
 # Icalendar for generating .ics calendar files
 gem 'icalendar', '~> 2.10'
 
+# Solid Queue for background job processing
+gem 'solid_queue', '~> 1.0'
+
 group :development, :test do
   gem 'dotenv-rails', '~> 2.8.0'
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem

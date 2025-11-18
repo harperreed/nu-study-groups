@@ -29,7 +29,7 @@ class StudySessionsController < ApplicationController
     if @session.save
       # Send notification to all group members about the new session
       @study_group.members.each do |member|
-        SessionMailer.new_session_created(@session, member).deliver_now
+        SessionMailer.new_session_created(@session, member).deliver_later
       end
 
       redirect_to study_group_study_session_path(@study_group, @session), notice: 'Session was successfully created.'

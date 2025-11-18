@@ -21,7 +21,7 @@ class SessionRsvpsController < ApplicationController
 
     if @rsvp.save
       # Send RSVP confirmation email with .ics attachment
-      SessionMailer.rsvp_confirmation(@rsvp).deliver_now
+      SessionMailer.rsvp_confirmation(@rsvp).deliver_later
 
       redirect_to study_group_study_session_path(@session.study_group, @session),
                   notice: "You've RSVP'd #{@rsvp.status.humanize} for this session."
