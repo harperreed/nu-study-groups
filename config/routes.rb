@@ -11,6 +11,9 @@ Rails.application.routes.draw do
     member do
       post :join
     end
+
+    # Study Sessions nested under study groups
+    resources :study_sessions, only: [:index, :show, :new, :create, :edit, :update, :destroy]
   end
 
   # Study Group Memberships (approve/reject join requests)
@@ -20,6 +23,9 @@ Rails.application.routes.draw do
       patch :reject
     end
   end
+
+  # Session RSVPs (separate resource, not nested)
+  resources :session_rsvps, only: [:create, :update, :destroy]
 
   # Health check
   get "up" => "rails/health#show", as: :rails_health_check

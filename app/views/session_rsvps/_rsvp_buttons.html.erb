@@ -1,0 +1,81 @@
+<!-- ABOUTME: RSVP buttons partial with Turbo Frame for dynamic updates -->
+<!-- ABOUTME: Shows Going/Maybe/Not Going buttons and capacity status -->
+<%
+  session_full = session.full?
+  can_rsvp_going = !session_full || (current_user_rsvp&.going?)
+%>
+
+<% if current_user_rsvp %>
+  <!-- User has already RSVP'd - show update buttons -->
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-3">
+      <%= form_with(model: current_user_rsvp, url: session_rsvp_path(current_user_rsvp), method: :patch, local: true) do |form| %>
+        <%= form.hidden_field :status, value: 'going' %>
+        <%= form.submit "Going",
+            disabled: !can_rsvp_going,
+            class: "flex-1 py-2 px-4 rounded font-semibold #{current_user_rsvp.going? ? 'bg-green-600 text-white' : 'bg-white text-green-600 border-2 border-green-600 hover:bg-green-50'} #{!can_rsvp_going ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}" %>
+      <% end %>
+
+      <%= form_with(model: current_user_rsvp, url: session_rsvp_path(current_user_rsvp), method: :patch, local: true) do |form| %>
+        <%= form.hidden_field :status, value: 'maybe' %>
+        <%= form.submit "Maybe",
+            class: "flex-1 py-2 px-4 rounded font-semibold cursor-pointer #{current_user_rsvp.maybe? ? 'bg-yellow-500 text-white' : 'bg-white text-yellow-600 border-2 border-yellow-500 hover:bg-yellow-50'}" %>
+      <% end %>
+
+      <%= form_with(model: current_user_rsvp, url: session_rsvp_path(current_user_rsvp), method: :patch, local: true) do |form| %>
+        <%= form.hidden_field :status, value: 'not_going' %>
+        <%= form.submit "Not Going",
+            class: "flex-1 py-2 px-4 rounded font-semibold cursor-pointer #{current_user_rsvp.not_going? ? 'bg-gray-600 text-white' : 'bg-white text-gray-600 border-2 border-gray-600 hover:bg-gray-50'}" %>
+      <% end %>
+    </div>
+
+    <%= button_to "Remove RSVP", session_rsvp_path(current_user_rsvp), method: :delete,
+        class: "text-sm text-red-600 hover:text-red-800 underline",
+        data: { confirm: "Are you sure you want to remove your RSVP?" } %>
+
+    <% if !can_rsvp_going && !current_user_rsvp.going? %>
+      <p class="text-sm text-red-600">
+        This session is currently full. You can only select Maybe or Not Going.
+      </p>
+    <% end %>
+  </div>
+<% else %>
+  <!-- User hasn't RSVP'd yet - show create buttons -->
+  <div class="flex flex-col gap-4">
+    <div class="flex gap-3">
+      <%= form_with(model: SessionRsvp.new, url: session_rsvps_path, method: :post, local: true) do |form| %>
+        <%= form.hidden_field :session_id, value: session.id %>
+        <%= form.hidden_field :status, value: 'going' %>
+        <%= form.submit "Going",
+            disabled: !can_rsvp_going,
+            class: "flex-1 bg-white text-green-600 border-2 border-green-600 hover:bg-green-50 py-2 px-4 rounded font-semibold #{!can_rsvp_going ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer'}" %>
+      <% end %>
+
+      <%= form_with(model: SessionRsvp.new, url: session_rsvps_path, method: :post, local: true) do |form| %>
+        <%= form.hidden_field :session_id, value: session.id %>
+        <%= form.hidden_field :status, value: 'maybe' %>
+        <%= form.submit "Maybe",
+            class: "flex-1 bg-white text-yellow-600 border-2 border-yellow-500 hover:bg-yellow-50 py-2 px-4 rounded font-semibold cursor-pointer" %>
+      <% end %>
+
+      <%= form_with(model: SessionRsvp.new, url: session_rsvps_path, method: :post, local: true) do |form| %>
+        <%= form.hidden_field :session_id, value: session.id %>
+        <%= form.hidden_field :status, value: 'not_going' %>
+        <%= form.submit "Not Going",
+            class: "flex-1 bg-white text-gray-600 border-2 border-gray-600 hover:bg-gray-50 py-2 px-4 rounded font-semibold cursor-pointer" %>
+      <% end %>
+    </div>
+
+    <% if session_full %>
+      <p class="text-sm text-red-600">
+        This session is currently full. You can only RSVP as Maybe or Not Going.
+      </p>
+    <% end %>
+  </div>
+<% end %>
+
+<% if session.max_capacity.present? %>
+  <div class="mt-4 text-sm text-gray-600">
+    <strong><%= session.session_rsvps.attending.count %> / <%= session.max_capacity %></strong> spots filled
+  </div>
+<% end %>

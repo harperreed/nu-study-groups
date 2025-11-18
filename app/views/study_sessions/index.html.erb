@@ -1,0 +1,73 @@
+<!-- ABOUTME: Sessions index page listing all sessions for a study group -->
+<!-- ABOUTME: Shows upcoming sessions with dates, times, and RSVP counts -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="sm:flex sm:items-center sm:justify-between mb-6">
+    <div>
+      <h1 class="text-2xl font-bold text-gray-900">Sessions</h1>
+      <p class="mt-1 text-sm text-gray-500"><%= @study_group.name %></p>
+    </div>
+    <% if policy(Session.new(study_group: @study_group)).create? %>
+      <%= link_to "Create Session", new_study_group_study_session_path(@study_group), class: "mt-4 sm:mt-0 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded" %>
+    <% end %>
+  </div>
+
+  <% if @sessions.any? %>
+    <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+      <ul class="divide-y divide-gray-200">
+        <% @sessions.each do |session| %>
+          <li class="hover:bg-gray-50">
+            <%= link_to study_group_study_session_path(@study_group, session), class: "block px-4 py-5 sm:px-6" do %>
+              <div class="flex items-center justify-between">
+                <div class="flex-1">
+                  <h3 class="text-lg font-medium text-gray-900"><%= session.title %></h3>
+                  <div class="mt-2 flex items-center text-sm text-gray-500">
+                    <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                    </svg>
+                    <%= session.date.strftime('%A, %B %d, %Y') %>
+                    <span class="mx-2">|</span>
+                    <%= session.start_time.strftime('%I:%M %p') %> - <%= session.end_time.strftime('%I:%M %p') %>
+                  </div>
+                  <% if session.location.present? %>
+                    <div class="mt-1 flex items-center text-sm text-gray-500">
+                      <svg class="flex-shrink-0 mr-1.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                      </svg>
+                      <%= session.location %>
+                    </div>
+                  <% end %>
+                </div>
+                <div class="ml-4 flex-shrink-0 flex flex-col items-end">
+                  <% if session.max_capacity.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= session.full? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                      <%= session.session_rsvps.attending.count %>/<%= session.max_capacity %> spots
+                    </span>
+                  <% else %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      <%= session.session_rsvps.attending.count %> attending
+                    </span>
+                  <% end %>
+                  <% user_rsvp = session.session_rsvps.find_by(user: current_user) %>
+                  <% if user_rsvp %>
+                    <span class="mt-1 text-xs <%= user_rsvp.going? ? 'text-green-600' : user_rsvp.maybe? ? 'text-yellow-600' : 'text-gray-600' %>">
+                      You: <%= user_rsvp.status.titleize %>
+                    </span>
+                  <% end %>
+                </div>
+              </div>
+            <% end %>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  <% else %>
+    <div class="bg-white shadow sm:rounded-lg">
+      <div class="px-4 py-5 sm:p-6">
+        <p class="text-sm text-gray-500">No sessions scheduled yet.</p>
+      </div>
+    </div>
+  <% end %>
+
+  <%= link_to "Back to Study Group", study_group_path(@study_group), class: "mt-4 inline-block text-blue-600 hover:text-blue-800" %>
+</div>

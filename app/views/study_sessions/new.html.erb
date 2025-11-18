@@ -1,0 +1,16 @@
+<!-- ABOUTME: New session form page -->
+<!-- ABOUTME: Uses shared form partial for session creation -->
+<div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+  <div class="bg-white shadow sm:rounded-lg">
+    <div class="px-4 py-5 sm:px-6">
+      <h1 class="text-2xl font-bold text-gray-900">Create New Session</h1>
+      <p class="mt-1 text-sm text-gray-500"><%= @study_group.name %></p>
+    </div>
+
+    <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
+      <%= render 'form' %>
+    </div>
+  </div>
+
+  <%= link_to "Back to Sessions", study_group_study_sessions_path(@study_group), class: "mt-4 inline-block text-blue-600 hover:text-blue-800" %>
+</div>

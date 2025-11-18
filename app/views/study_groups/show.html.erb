@@ -93,9 +93,36 @@
     </div>
 
     <div class="border-t border-gray-200 px-4 py-5 sm:px-6">
-      <h3 class="text-lg font-medium text-gray-900 mb-4">Upcoming Sessions</h3>
-      <% if @study_group.sessions.any? %>
-        <p class="text-sm text-gray-500">Sessions feature coming soon</p>
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-lg font-medium text-gray-900">Upcoming Sessions</h3>
+        <% if policy(Session.new(study_group: @study_group)).create? %>
+          <%= link_to "Create Session", new_study_group_study_session_path(@study_group), class: "bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-3 rounded text-sm" %>
+        <% end %>
+      </div>
+      <% upcoming_sessions = @study_group.sessions.upcoming.limit(3) %>
+      <% if upcoming_sessions.any? %>
+        <ul class="divide-y divide-gray-200 mb-4">
+          <% upcoming_sessions.each do |session| %>
+            <li class="py-3">
+              <%= link_to study_group_study_session_path(@study_group, session), class: "block hover:bg-gray-50 -mx-2 px-2 py-2 rounded" do %>
+                <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <h4 class="text-sm font-medium text-gray-900"><%= session.title %></h4>
+                    <p class="text-xs text-gray-500 mt-1">
+                      <%= session.date.strftime('%b %d') %> at <%= session.start_time.strftime('%I:%M %p') %>
+                    </p>
+                  </div>
+                  <% if session.max_capacity.present? %>
+                    <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium <%= session.full? ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800' %>">
+                      <%= session.session_rsvps.attending.count %>/<%= session.max_capacity %>
+                    </span>
+                  <% end %>
+                </div>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+        <%= link_to "View All Sessions", study_group_study_sessions_path(@study_group), class: "text-sm text-blue-600 hover:text-blue-800" %>
       <% else %>
         <p class="text-sm text-gray-500">No sessions scheduled yet</p>
       <% end %>
