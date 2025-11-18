@@ -10,7 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2025_11_18_164710) do
+ActiveRecord::Schema[7.1].define(version: 2025_11_18_165425) do
+  create_table "attendance_records", force: :cascade do |t|
+    t.integer "session_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_attendance_records_on_session_id"
+  end
+
   create_table "course_teachers", force: :cascade do |t|
     t.integer "course_id", null: false
     t.integer "user_id", null: false
@@ -30,6 +37,43 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_18_164710) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["code", "semester", "year"], name: "index_courses_on_code_and_semester_and_year", unique: true
+  end
+
+  create_table "session_resources", force: :cascade do |t|
+    t.integer "session_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_session_resources_on_session_id"
+  end
+
+  create_table "session_rsvps", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "session_id", null: false
+    t.integer "status", default: 0, null: false
+    t.datetime "rsvp_at", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["session_id"], name: "index_session_rsvps_on_session_id"
+    t.index ["status"], name: "index_session_rsvps_on_status"
+    t.index ["user_id", "session_id"], name: "index_session_rsvps_on_user_id_and_session_id", unique: true
+    t.index ["user_id"], name: "index_session_rsvps_on_user_id"
+  end
+
+  create_table "sessions", force: :cascade do |t|
+    t.string "title", null: false
+    t.date "date", null: false
+    t.time "start_time", null: false
+    t.time "end_time", null: false
+    t.string "location"
+    t.string "meeting_link"
+    t.text "description"
+    t.integer "max_capacity"
+    t.text "prep_materials"
+    t.integer "study_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["date"], name: "index_sessions_on_date"
+    t.index ["study_group_id"], name: "index_sessions_on_study_group_id"
   end
 
   create_table "study_group_memberships", force: :cascade do |t|
@@ -75,8 +119,13 @@ ActiveRecord::Schema[7.1].define(version: 2025_11_18_164710) do
     t.index ["provider", "uid"], name: "index_users_on_provider_and_uid", unique: true
   end
 
+  add_foreign_key "attendance_records", "sessions"
   add_foreign_key "course_teachers", "courses"
   add_foreign_key "course_teachers", "users"
+  add_foreign_key "session_resources", "sessions"
+  add_foreign_key "session_rsvps", "sessions"
+  add_foreign_key "session_rsvps", "users"
+  add_foreign_key "sessions", "study_groups"
   add_foreign_key "study_group_memberships", "study_groups"
   add_foreign_key "study_group_memberships", "users"
   add_foreign_key "study_group_memberships", "users", column: "approved_by_id"

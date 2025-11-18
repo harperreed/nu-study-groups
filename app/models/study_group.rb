@@ -6,6 +6,7 @@ class StudyGroup < ApplicationRecord
 
   has_many :study_group_memberships, dependent: :destroy
   has_many :members, through: :study_group_memberships, source: :user
+  has_many :sessions, dependent: :destroy
 
   enum group_type: { official: 0, peer: 1 }
   enum status: { active: 0, archived: 1 }

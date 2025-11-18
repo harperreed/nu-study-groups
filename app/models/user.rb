@@ -8,6 +8,9 @@ class User < ApplicationRecord
   has_many :study_group_memberships, dependent: :destroy
   has_many :study_groups, through: :study_group_memberships
 
+  has_many :session_rsvps, dependent: :destroy
+  has_many :sessions, through: :session_rsvps
+
   enum role: { student: 0, teacher: 1, admin: 2 }
 
   validates :email, presence: true, uniqueness: true

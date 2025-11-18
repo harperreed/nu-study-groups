@@ -15,24 +15,48 @@
           null
         ]
       },
-      "/app/app/models/study_group.rb": {
+      "/app/app/models/session.rb": {
         "lines": [
           null,
           null,
           1,
           1,
+          null,
+          1,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          1,
           1,
           null,
           1,
           1,
           null,
           1,
-          1,
-          null,
-          1,
-          1,
-          null,
           3,
+          null,
+          2,
+          null,
+          null,
+          1,
+          1,
+          null,
+          1,
+          null,
+          null,
+          1,
+          null,
+          1,
+          13,
+          null,
+          7,
+          1,
+          null,
+          null,
           null
         ]
       },
@@ -43,33 +67,41 @@
           null
         ]
       },
-      "/app/app/models/study_group_membership.rb": {
+      "/app/app/models/session_rsvp.rb": {
         "lines": [
           null,
           null,
           1,
           1,
           1,
-          1,
           null,
           1,
           null,
           1,
           null,
+          5,
+          null
+        ]
+      },
+      "/app/app/models/study_group.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          1,
+          null,
+          1,
+          1,
+          1,
+          null,
           1,
           1,
           null,
-          null,
-          null,
-          null,
-          null,
-          null,
           1,
           1,
           null,
-          null,
-          null,
-          null,
+          1,
           null
         ]
       },
@@ -85,7 +117,7 @@
           1,
           1,
           null,
-          5,
+          8,
           null
         ]
       },
@@ -102,6 +134,9 @@
           1,
           null,
           1,
+          1,
+          null,
+          1,
           null,
           1,
           1,
@@ -115,6 +150,24 @@
           0,
           null,
           null,
+          null
+        ]
+      },
+      "/app/app/models/session_resource.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
+          null
+        ]
+      },
+      "/app/app/models/attendance_record.rb": {
+        "lines": [
+          null,
+          null,
+          1,
+          1,
           null
         ]
       },
@@ -228,8 +281,39 @@
           0
         ],
         "branches": {}
+      },
+      "/app/app/models/study_group_membership.rb": {
+        "lines": [
+          null,
+          null,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          null,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          null,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "branches": {}
       }
     },
-    "timestamp": 1763484521
+    "timestamp": 1763484894
   }
 }
