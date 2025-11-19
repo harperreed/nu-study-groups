@@ -70,6 +70,12 @@ Create a `.env.production` file based on `.env.production.example`:
    GOOGLE_CLIENT_SECRET=<your-client-secret>
    ```
 
+4. **Application Host** (required for email links to work correctly)
+   ```bash
+   APP_HOST=yourdomain.com
+   ```
+   This is used by ActionMailer to generate absolute URLs in emails. Without this, email links will be broken.
+
 ### Optional Variables
 
 ```bash

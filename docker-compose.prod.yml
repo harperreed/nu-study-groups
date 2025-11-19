@@ -47,6 +47,7 @@ services:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - APP_HOST=${APP_HOST}
       - RAILS_SERVE_STATIC_FILES=true
       - RAILS_LOG_TO_STDOUT=true
     depends_on:
@@ -74,6 +75,7 @@ services:
       - SECRET_KEY_BASE=${SECRET_KEY_BASE}
       - GOOGLE_CLIENT_ID=${GOOGLE_CLIENT_ID}
       - GOOGLE_CLIENT_SECRET=${GOOGLE_CLIENT_SECRET}
+      - APP_HOST=${APP_HOST}
     depends_on:
       db:
         condition: service_healthy

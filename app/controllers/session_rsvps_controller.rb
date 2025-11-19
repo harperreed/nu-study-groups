@@ -66,6 +66,6 @@ class SessionRsvpsController < ApplicationController
   end
 
   def rsvp_params
-    params.require(:session_rsvp).permit(:status)
+    params.require(:session_rsvp).permit(:status, :session_id)
   end
 end
